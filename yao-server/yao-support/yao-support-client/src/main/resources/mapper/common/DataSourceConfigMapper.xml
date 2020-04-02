@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.y3tu.yao.support.client.common.mapper.DataSourceConfigMapper">
+
+    <select id="page" resultType="com.y3tu.yao.support.client.common.entity.DataSourceConfig">
+        select id,name,driver_class as driverClass,jdbc_url as jdbcUrl,username,password, type,
+        create_time as createTime,modify_time as modifyTime
+        from data_source_config where 1=1
+        <if test="entity.name != null and entity.name != ''">
+            AND name like CONCAT('%',#{entity.name},'%')
+        </if>
+    </select>
+
+</mapper>

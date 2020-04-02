@@ -1,0 +1,9 @@
+FROM openjdk:8u212-jre
+MAINTAINER Y3tu 14643092@qq.com
+
+COPY jar/yao-log-server*.jar /app/app.jar
+ADD skywalking/agent/ /agent
+
+ENV JAVA_OPTS="-Xmx256m -Xms256m"
+
+ENTRYPOINT ["java","-javaagent:/agent/skywalking-agent.jar", "-jar", "/app/app.jar"]

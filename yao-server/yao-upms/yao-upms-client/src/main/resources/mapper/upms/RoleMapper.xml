@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.y3tu.yao.upms.client.mapper.RoleMapper">
+
+    <select id="page" parameterType="com.y3tu.yao.upms.client.entity.Role" resultType="com.y3tu.yao.upms.client.entity.Role">
+        SELECT
+        r.role_id roleId,
+        r.role_name roleName,
+        r.default_role defaultRole,
+        r.remark,
+        r.create_time createTime,
+        r.modify_time modifyTime,
+        GROUP_CONCAT( rm.resource_id ) resourceIds
+        FROM
+        t_role r
+        LEFT JOIN t_role_resource rm ON ( r.role_id = rm.role_id )
+        WHERE 1 = 1
+        <if test="entity.roleName != null and entity.roleName != ''">
+            AND r.role_name like CONCAT('%',#{entity.roleName},'%')
+        </if>
+        GROUP BY
+        r.role_id
+    </select>
+
+</mapper>

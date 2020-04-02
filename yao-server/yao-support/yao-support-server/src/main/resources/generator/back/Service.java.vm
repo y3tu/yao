@@ -1,0 +1,23 @@
+package ${package}.${moduleName}.client.service;
+
+import com.y3tu.tool.web.base.pojo.Page;
+import ${package}.${moduleName}.client.entity.${className};
+import com.y3tu.tool.web.base.service.BaseService;
+
+/**
+ * ${remarks} service接口
+ *
+ * @author ${author}
+ */
+public interface ${className}Service extends BaseService<${className}> {
+
+    Page<${className}> find${className}Page(Page<${className}> page);
+
+    void create${className}(${className} ${caseClassName});
+
+    void update${className}(${className} ${caseClassName});
+
+    void delete${className}(String[] ids);
+
+}
+

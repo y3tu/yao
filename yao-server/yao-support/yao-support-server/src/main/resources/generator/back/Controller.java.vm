@@ -1,0 +1,55 @@
+package ${package}.${moduleName}.server.controller;
+
+import com.y3tu.tool.core.pojo.R;
+import com.y3tu.tool.web.base.pojo.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import ${package}.${moduleName}.client.entity.${className};
+import ${package}.${moduleName}.client.service.${className}Service;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
+/**
+ * ${remarks} Controller
+ *
+ * @author ${author}
+ */
+@RestController
+@RequestMapping("/${moduleName}")
+public class ${className}Controller {
+
+    @Autowired
+    ${className}Service ${caseClassName}Service;
+
+    @PostMapping("page")
+    @PreAuthorize("hasAuthority('${caseClassName}:view')")
+    public R page(@RequestBody Page<${className}> page) {
+        page = ${caseClassName}Service.find${className}Page(page);
+        return R.success(page);
+    }
+
+    @PostMapping("create")
+    @PreAuthorize("hasAuthority('${caseClassName}:create')")
+    public R create(@Valid ${className} ${caseClassName}) {
+        ${caseClassName}Service.create${className}(${caseClassName});
+        return R.success();
+    }
+
+    @PutMapping("update")
+    @PreAuthorize("hasAuthority('${caseClassName}:update')")
+    public R update(@Valid ${className} ${caseClassName}) {
+        ${caseClassName}Service.update${className}(${caseClassName});
+        return R.success();
+    }
+
+    @DeleteMapping("delete")
+    @PreAuthorize("hasAuthority('${caseClassName}:delete')")
+    public R delete(String[] ids) {
+        ${caseClassName}Service.delete${className}(ids);
+        return R.success();
+    }
+
+}

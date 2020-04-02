@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.y3tu</groupId>
+        <artifactId>yao</artifactId>
+        <version>2.0</version>
+    </parent>
+
+    <artifactId>yao-starter</artifactId>
+    <packaging>pom</packaging>
+    <name>Yao-Starter</name>
+
+    <modules>
+        <module>yao-common-starter</module>
+        <module>yao-elasticsearch-starter</module>
+        <module>yao-redis-starter</module>
+        <module>yao-swagger2-starter</module>
+    </modules>
+
+</project>

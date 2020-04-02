@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  yao-auth:
+    build:
+      context: ./
+      dockerfile: Dockerfile-yao-auth
+  yao-gateway:
+    build:
+      context: ./
+      dockerfile: Dockerfile-yao-gateway
+  yao-upms-server:
+    build:
+      context: ./
+      dockerfile: Dockerfile-yao-upms-server
+  yao-support-server:
+    build:
+      context: ./
+      dockerfile: Dockerfile-yao-support-server
+  yao-log-server:
+    build:
+      context: ./
+      dockerfile: Dockerfile-yao-log-server

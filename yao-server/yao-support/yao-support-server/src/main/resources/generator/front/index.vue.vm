@@ -1,0 +1,198 @@
+<template>
+    <div class="app-container">
+        <div class="head-container">
+            #foreach($column in $columns)
+                #if($column.enableSearch=='true')
+                    #if($column.searchType==1)
+                        <el-input v-model="page.entity.${column.caseColumnName}" placeholder="${column.comment}" class="filter-item search-item" @keyup.enter.native="search"/>
+                    #elseif($column.searchType==2)
+                        <el-select v-model="page.entity.${column.caseColumnName}" placeholder="请选择${column.comment}" class="filter-item search-item">
+                            <el-option label="default" value="default"/>
+                        </el-select>
+                    #elseif($column.searchType==3)
+                        <el-date-picker
+                                v-model="page.params.timeRange"
+                                :range-separator="null"
+                                :start-placeholder="${column.comment}"
+                                value-format="yyyy-MM-dd"
+                                class="filter-item search-item date-range-item"
+                                type="daterange"
+                                @keyup.enter.native="search"/>
+                    #else
+                        <el-date-picker
+                                v-model="page.params.timeRange"
+                                :range-separator="null"
+                                :start-placeholder="${column.comment}"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                class="filter-item search-item date-range-item"
+                                type="datetimerange"
+                                @keyup.enter.native="search"/>
+                    #end
+                #end
+            #end
+
+            <el-button class="filter-item" type="primary" plain @click="search">搜索</el-button>
+            <el-button class="filter-item" type="warning" plain @click="reset">重置</el-button>
+            <el-dropdown v-has-any-permission="['${caseClassName}:create','${caseClassName}:delete']" trigger="click" class="filter-item">
+                <el-button>更多操作<i class="el-icon-arrow-down el-icon--right"/></el-button>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-has-permission="['${caseClassName}:create']" @click.native="add">添加</el-dropdown-item>
+                    <el-dropdown-item v-has-permission="['${caseClassName}:delete']" @click.native="batchDelete">删除</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+
+        </div>
+
+        <!--表格渲染-->
+        <el-table
+                ref="table"
+                :key="tableKey"
+                v-loading="pageLoading"
+                :data="page.records"
+                style="width: 100%;"
+                @selection-change="onSelectChange"
+                @sort-change="sortChange">
+
+            #foreach($column in $columns)
+                #if($column.enableShow=='true'&& $column.columnType !='Date')
+                    <el-table-column prop="${column.caseColumnName}" label="${column.comment}"></el-table-column>
+                #elseif($column.enableShow=='true'&& $column.columnType =='Date')
+                    <el-table-column prop="${column.caseColumnName}" label="${column.comment}">
+                        <template slot-scope="scope">
+                            <span>{{ parseTime(scope.row.${column.caseColumnName}) }}</span>
+                        </template>
+                    </el-table-column>
+                #end
+            #end
+            <el-table-column :label="操作" align="center" min-width="150px" class-name="small-padding fixed-width">
+                <template slot-scope="{row}">
+                    <i v-hasPermission="['${caseClassName}:view']" class="el-icon-view table-operation" style="color: #87d068;" @click="view(row)"/>
+                    <i v-hasPermission="['${caseClassName}:update']" class="el-icon-setting table-operation" style="color: #2db7f5;" @click="update(row)"/>
+                    <i v-hasPermission="['${caseClassName}:delete']" class="el-icon-delete table-operation" style="color: #f50;" @click="singleDelete(row)"/>
+                    <el-link v-has-no-permission="['${caseClassName}:view','${caseClassName}:update','${caseClassName}:delete']" class="no-perm">
+                        没有权限
+                    </el-link>
+                </template>
+            </el-table-column>
+        </el-table>
+        <!--分页组件-->
+        <el-pagination
+                :total="total"
+                style="margin-top: 8px;"
+                layout="total, prev, pager, next, sizes"
+                :current-page="currentPage"
+                :page-size="pageSize"
+                @size-change="sizeChange"
+                @current-change="pageChange">
+        </el-pagination>
+
+        <Form
+                ref="form"
+                :dialog-visible="dialog.isVisible"
+                :title="dialog.title"
+                @success="formSuccess"
+                @close="formClose"/>
+
+    </div>
+</template>
+
+<script>
+
+    import pageMixins from '@/mixins/page'
+
+    import Form from './form'
+
+    export default {
+        mixins: [pageMixins],
+        components: {Form},
+        data() {
+            return {
+                tableKey: 0,
+                dialog: {
+                    isVisible: false,
+                    title: ''
+                },
+                selection: []
+            }
+        },
+        created() {
+            this.$nextTick(() => {
+                this.init()
+            })
+        },
+        methods: {
+            init() {
+                this.findPage();
+            },
+            findPageInit() {
+                this.pageUrl = '${apiPrefix}/${moduleName}/page';
+                return true;
+            },
+            search() {
+                this.findPage();
+            },
+            reset() {
+                this.resetPage();
+                this.search();
+            },
+            create() {
+                this.dialog.title = '添加';
+                this.dialog.isVisible = true
+            },
+            singleDelete(row) {
+                this.$refs.table.toggleRowSelection(row,true);
+                this.batchDelete()
+            },
+            batchDelete() {
+                if (!this.selection.length) {
+                    this.$message({
+                        message: '请选择数据',
+                        type: 'warning'
+                    });
+                    return
+                }
+                this.$confirm('选中数据将被永久删除, 是否继续？', '提示', {
+                    confirmButtonText: '确认',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const ids = [];
+                    this.selection.forEach((data) => {
+                        ids.push(data.id)
+                    });
+                    this.delete(ids)
+                }).catch(() => {
+                    this.clearSelections()
+                })
+            },
+            delete(ids) {
+                this.$delete('${apiPrefix}/${moduleName}/delete',ids).then(() => {
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                    this.search()
+                })
+            },
+            update(row) {
+                let ref = this.$refs;
+                ref.form.set${className}(row);
+                this.dialog.title = '修改更新';
+                this.dialog.isVisible = true
+            },
+            onSelectChange(selection) {
+                this.selection = selection
+            },
+            formClose() {
+                this.dialog.isVisible = false
+            },
+            formSuccess() {
+                this.search()
+            },
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>

@@ -1,0 +1,13 @@
+package ${package}.${moduleName}.client.mapper;
+
+import ${package}.${moduleName}.client.entity.${className};
+import com.y3tu.tool.web.base.mapper.BaseMapper;
+
+/**
+ * ${remarks} Mapper接口
+ *
+ * @author ${author}
+ */
+public interface ${className}Mapper extends BaseMapper<${className}> {
+
+}

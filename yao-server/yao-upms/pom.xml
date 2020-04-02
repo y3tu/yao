@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.y3tu</groupId>
+        <artifactId>yao-server</artifactId>
+        <version>2.0</version>
+    </parent>
+
+    <packaging>pom</packaging>
+    <artifactId>yao-upms</artifactId>
+    <name>Yao-Upms</name>
+    <description>upms(通用权限管理)</description>
+
+    <modules>
+        <module>yao-upms-client</module>
+        <module>yao-upms-server</module>
+    </modules>
+
+</project>

@@ -1,0 +1,188 @@
+<template>
+    <el-dialog
+            :title="title"
+            :width="width"
+            top="50px"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :visible.sync="isVisible">
+        <el-form ref="form" :model="${caseClassName}" :rules="rules" size="small" label-width="80px">
+#foreach($column in $columns)
+    #if($column.caseColumnName!=${pk.caseColumnName})
+        #if($column.enableEdit=='true')
+            <el-form-item label="${column.comment}" prop="$column.caseColumnName">
+                #if($column.formType==1)
+                    <el-input v-model="page.entity.${column.caseColumnName}" placeholder="${column.comment}"
+                              class="filter-item search-item" @keyup.enter.native="search"/>
+                #elseif($column.searchType==2)
+                    <el-select v-model="page.entity.${column.caseColumnName}"
+                               placeholder="请选择${column.comment}" class="filter-item search-item">
+                        <el-option label="default" value="default"/>
+                    </el-select>
+                #elseif($column.searchType==3)
+                    <el-date-picker
+                            v-model="page.params.timeRange"
+                            :range-separator="null"
+                            :start-placeholder="${column.comment}"
+                            value-format="yyyy-MM-dd"
+                            class="filter-item search-item date-range-item"
+                            type="daterange"
+                            @keyup.enter.native="search"/>
+                #else
+                    <el-date-picker
+                            v-model="page.params.timeRange"
+                            :range-separator="null"
+                            :start-placeholder="${column.comment}"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            class="filter-item search-item date-range-item"
+                            type="datetimerange"
+                            @keyup.enter.native="search"/>
+                #end
+            </el-form-item>
+        #end
+    #end
+#end
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="warning" plain :loading="buttonLoading" @click="isVisible = false">
+                取消
+            </el-button>
+            <el-button type="primary" plain :loading="buttonLoading" @click="submitForm">
+                确认
+            </el-button>
+        </div>
+    </el-dialog>
+</template>
+
+<script>
+
+    export default {
+        name: '${caseClassName}Form',
+        props: {
+            dialogVisible: {
+                type: Boolean,
+                default: false
+            },
+            title: {
+                type: String,
+                default: ''
+            }
+        },
+        data() {
+            return {
+            ${caseClassName}:
+            this.init${className}(),
+                    screenWidth
+        :
+            0,
+                    width
+        :
+            this.initWidth(),
+                    buttonLoading
+        :
+            false,
+                    rules
+        :
+            {
+                #foreach($column in $columns)${column.caseColumnName}: [{
+                    required: true,
+                    message: '不能为空',
+                    trigger: 'blur'
+                }]#if($foreach.hasNext),#end
+                #end
+            }
+        }
+        },
+        mounted() {
+            window.onresize = () => {
+                return (() => {
+                    this.width = this.initWidth()
+                })()
+            }
+        },
+        computed: {
+            isVisible: {
+                get() {
+                    return this.dialogVisible
+                },
+                set() {
+                    this.close();
+                    this.reset()
+                }
+            }
+        },
+        methods: {
+            init${className}() {
+                return {#foreach($column in $columns)${column.caseColumnName}: ''#if($foreach.hasNext),#end#end}
+            },
+            initWidth() {
+                this.screenWidth = document.body.clientWidth;
+                if (this.screenWidth < 991) {
+                    return '90%'
+                } else if (this.screenWidth < 1400) {
+                    return '45%'
+                } else {
+                    return '800px'
+                }
+            },
+            set${className}(val) {
+                this.${caseClassName} = {...val}
+            },
+            close() {
+                this.$emit('close')
+            },
+            reset() {
+                this.$refs.form.clearValidate();
+                this.$refs.form.resetFields();
+                this.${caseClassName}= this.init${className}();
+            },
+            submitForm() {
+                let refs = this.$refs;
+                refs.form.validate((valid) => {
+                    if (valid) {
+                        this.buttonLoading = true;
+                        if (!this.${caseClassName}.${pk.caseColumnName}) {
+                            this.create();
+                        } else {
+                            this.update();
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            create() {
+                this.$post('${apiPrefix}/${moduleName}/create', {...this.${caseClassName}}).then(() => {
+                    this.buttonLoading = false;
+                    this.isVisible = false;
+                    this.$message({
+                        message: '添加成功',
+                        type: 'success'
+                    });
+                    this.$emit('success')
+                }).catch(() => {
+                    this.buttonLoading = false;
+                });
+            },
+            update() {
+                #foreach($column in $columns)#if($column.columnType =='Date')
+                    this.${caseClassName}.$column.caseColumnName= null;#end#end
+                this.$put('${apiPrefix}/${moduleName}/update', {...this.${caseClassName}}).then(() => {
+                    this.buttonLoading = false;
+                    this.isVisible = false;
+                    this.$message({
+                        message: '更新成功',
+                        type: 'success'
+                    });
+                    this.$emit('success')
+                }).catch(() => {
+                    this.buttonLoading = false;
+                });
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>

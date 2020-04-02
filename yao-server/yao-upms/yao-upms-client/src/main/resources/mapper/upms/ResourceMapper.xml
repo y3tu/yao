@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.y3tu.yao.upms.client.mapper.ResourceMapper">
+
+    <select id="findResourceByUsername" resultType="com.y3tu.yao.upms.client.entity.Resource">
+        select distinct m.*
+        from t_role r
+                 left join t_user_role ur on (r.role_id = ur.role_id)
+                 left join t_user u on (u.user_id = ur.user_id)
+                 left join t_role_resource rm on (rm.role_id = r.role_id)
+                 left join t_resource m on (m.resource_id = rm.resource_id)
+        where u.username = #{userName}
+          and m.permission is not null
+          and m.permission &lt;&gt; ''
+    </select>
+
+    <select id="findResourceByRoleCode" resultType="com.y3tu.yao.upms.client.entity.Resource">
+        select distinct m.*
+        from t_role r
+                 left join t_role_resource rm on (rm.role_id = r.role_id)
+                 left join t_resource m on (m.resource_id = rm.resource_id)
+        where u.role_code = #{roleCode}
+          and m.permission is not null
+          and m.permission &lt;&gt; ''
+    </select>
+
+    <select id="findUserPermission" resultType="string">
+        select distinct m.permission
+        from t_role r
+                 left join t_user_role ur on (r.role_id = ur.role_id)
+                 left join t_user u on (u.user_id = ur.user_id)
+                 left join t_role_resource rm on (rm.role_id = r.role_id)
+                 left join t_resource m on (m.resource_id = rm.resource_id)
+        where u.username = #{userName}
+          and m.permission is not null
+          and m.permission &lt;&gt; ''
+    </select>
+
+    <select id="findUserResource" resultType="com.y3tu.yao.upms.client.entity.Resource">
+        select m.*
+        from t_resource m
+        where m.resource_id in
+              (select distinct rm.resource_id
+               from t_role_resource rm
+                        left join t_role r on (rm.role_id = r.role_id)
+                        left join t_user_role ur on (ur.role_id = r.role_id)
+                        left join t_user u on (u.user_id = ur.user_id)
+               where u.username = #{userName})
+        order by m.order_num
+    </select>
+
+</mapper>

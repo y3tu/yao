@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.y3tu</groupId>
+        <artifactId>yao-starter</artifactId>
+        <version>2.0</version>
+    </parent>
+
+    <artifactId>yao-swagger2-starter</artifactId>
+    <packaging>jar</packaging>
+    <name>Yao-Swagger2-Starter</name>
+    <description>Swagger2接口api，需集成此依赖</description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.y3tu</groupId>
+            <artifactId>yao-common-starter</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

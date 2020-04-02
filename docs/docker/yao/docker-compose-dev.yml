@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+  yao-auth:
+    image: y3tu/yao-auth:latest
+    container_name: yao-auth
+    volumes:
+      - "/y3tu/yao/log/yao-auth:/log/yao-auth"
+    command:
+      - "--nacos.url=127.0.0.1:8848"
+      - "--redis.url=127.0.0.1"
+    environment:
+      - "TZ=Asia/Shanghai"
+      - "SW_AGENT_NAME=yao-auth"
+      - "SW_AGENT_COLLECTOR_BACKEND_SERVICES=127.0.0.1:11800"
+    ports:
+      - 8101:8101
+    restart: on-failure
+  yao-gateway:
+    image: y3tu/yao-gateway:latest
+    container_name: yao-gateway
+    volumes:
+      - "/y3tu/yao/log/yao-gateway:/log/yao-gateway"
+    command:
+      - "--nacos.url=127.0.0.1:8848"
+    environment:
+      - "TZ=Asia/Shanghai"
+      - "SW_AGENT_NAME=yao-gateway"
+      - "SW_AGENT_COLLECTOR_BACKEND_SERVICES=127.0.0.1:11800"
+    ports:
+      - 8301:8301
+    restart: on-failure
+  yao-upms-server:
+    image: y3tu/yao-upms-server:latest
+    container_name: yao-upms-server
+    volumes:
+      - "/y3tu/yao/log/yao-upms-server:/log/yao-upms-server"
+    command:
+      - "--nacos.url=127.0.0.1:8848"
+      - "--yao-gateway.url=127.0.0.1:8301"
+      - "--redis.url=127.0.0.1"
+      - "--rabbitmq.url=127.0.0.1"
+    environment:
+      - "TZ=Asia/Shanghai"
+      - "SW_AGENT_NAME=yao-upms-server"
+      - "SW_AGENT_COLLECTOR_BACKEND_SERVICES=116.85.42.174:11800"
+    ports:
+      - 8201:8201
+    restart: on-failure
+  yao-support-server:
+    image: y3tu/yao-support-server:latest
+    container_name: yao-support-server
+    volumes:
+      - "/y3tu/yao/log/yao-support-server:/log/yao-support-server"
+    command:
+      - "--nacos.url=127.0.0.1:8848"
+      - "--yao-gateway.url=127.0.0.1:8301"
+      - "--redis.url=127.0.0.1"
+      - "--rabbitmq.url=127.0.0.1"
+    environment:
+      - "TZ=Asia/Shanghai"
+      - "SW_AGENT_NAME=yao-support-server"
+      - "SW_AGENT_COLLECTOR_BACKEND_SERVICES=127.0.0.1:11800"
+    ports:
+      - 8901:8901
+    restart: on-failure
+  yao-log-server:
+    image: y3tu/yao-log-server:latest
+    container_name: yao-log-server
+    volumes:
+      - "/y3tu/yao/log/yao-log-server:/log/yao-log-server"
+    command:
+      - "--nacos.url=127.0.0.1:8848"
+      - "--yao-gateway.url=127.0.0.1:8301"
+      - "--redis.url=127.0.0.1"
+      - "--rabbitmq.url=127.0.0.1"
+    environment:
+      - "TZ=Asia/Shanghai"
+      - "SW_AGENT_NAME=yao-log-server"
+      - "SW_AGENT_COLLECTOR_BACKEND_SERVICES=127.0.0.1:11800"
+    ports:
+      - 8801:8801
+    restart: on-failure

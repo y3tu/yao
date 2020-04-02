@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: Yao-Log-Server
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: ${nacos.url}
+        group: YAO_GROUP
+        prefix: yao-log-server
+        file-extension: yaml
+      discovery:
+        server-addr: ${nacos.url}
+
+logging:
+  level:
+    com:
+      alibaba:
+        cloud:
+          nacos:
+            client:
+              NacosPropertySourceBuilder: error
