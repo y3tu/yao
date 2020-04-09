@@ -1,7 +1,8 @@
 {
-  "name": "yao-vue",
+  "name": "yao",
   "version": "1.0.0",
   "description": "Yao快速开发脚手架前端",
+  "homepage":"https://y3tu.github.io/yao",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve",
