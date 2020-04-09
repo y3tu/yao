@@ -21,7 +21,6 @@
 - yao-server 后台服务模块 
   >代码生成、upms(通用权限管理)、log(日志服务)、support(服务支撑) 
 - yao-starter 公共依赖
-- yao-ui 基于Vue ElementUI的后台管理界面，可打包进jar包，也可单独部署
 
 ## 功能模块
 ```

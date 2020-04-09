@@ -56,6 +56,13 @@
             <version>1.7</version>
         </dependency>
 
+        <!--JasperReports 报表-->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.12.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
