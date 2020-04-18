@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler extends BaseExceptionHandler {
 
+    @Override
     @ExceptionHandler(value = ValidateCodeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public R handleException(Exception e) {

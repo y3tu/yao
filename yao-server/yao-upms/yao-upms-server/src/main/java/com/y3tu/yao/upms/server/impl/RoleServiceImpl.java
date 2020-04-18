@@ -14,6 +14,7 @@ import com.y3tu.tool.web.base.service.impl.BaseServiceImpl;
 import com.y3tu.yao.upms.client.service.RoleResourceService;
 import com.y3tu.yao.upms.client.service.RoleService;
 import com.y3tu.yao.upms.client.service.UserRoleService;
+import com.y3tu.yao.upms.server.exception.UpmsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -84,6 +85,9 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 roleResourceList.add(roleResource);
             }
         });
+        if (roleResourceList.size() < 1) {
+            throw new UpmsException("角色至少需要一个资源权限");
+        }
         this.roleResourceService.saveBatchBySnowflakeId(roleResourceList, 1000);
     }
 

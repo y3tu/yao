@@ -12,6 +12,7 @@ spring:
         file-extension: yaml
       discovery:
         server-addr: ${nacos.url}
+        group: DEV_GROUP
 
 logging:
   level:

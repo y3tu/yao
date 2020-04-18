@@ -1,5 +1,6 @@
 package com.y3tu.yao.upms.client.entity;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -42,6 +43,7 @@ public class User extends BaseEntity {
      * 用户 ID
      */
     @TableId(value = "USER_ID", type = IdType.INPUT)
+    @ExcelProperty("用户ID")
     private String userId;
     /**
      * 用户名
@@ -49,6 +51,7 @@ public class User extends BaseEntity {
     @TableField("USERNAME")
     @Size(min = 4, max = 10, message = "{range}")
     @NotNull(message = "{required}")
+    @ExcelProperty("用户名")
     private String username;
     /**
      * 密码
@@ -61,6 +64,7 @@ public class User extends BaseEntity {
     @TableField("EMAIL")
     @Size(max = 50, message = "{noMoreThan}")
     @Email(message = "{email}")
+    @ExcelProperty("邮箱")
     private String email;
 
     /**
@@ -68,6 +72,7 @@ public class User extends BaseEntity {
      */
     @TableField("MOBILE")
     @IsMobile(message = "{mobile}")
+    @ExcelProperty("联系电话")
     private String mobile;
 
     /**
@@ -75,24 +80,28 @@ public class User extends BaseEntity {
      */
     @TableField("STATUS")
     @NotBlank(message = "{required}")
+    @ExcelProperty("状态")
     private String status;
 
     /**
      * 创建时间
      */
     @TableField("CREATE_TIME")
+    @ExcelProperty("创建时间")
     private Date createTime;
 
     /**
      * 修改时间
      */
     @TableField("MODIFY_TIME")
+    @ExcelProperty("修改时间")
     private Date modifyTime;
 
     /**
      * 最近访问时间
      */
     @TableField("LAST_LOGIN_TIME")
+    @ExcelProperty("最近访问时间")
     private Date lastLoginTime;
 
     /**
@@ -100,6 +109,7 @@ public class User extends BaseEntity {
      */
     @TableField("SSEX")
     @NotBlank(message = "{required}")
+    @ExcelProperty("性别")
     private String sex;
 
     /**
@@ -113,6 +123,7 @@ public class User extends BaseEntity {
      */
     @TableField("DESCRIPTION")
     @Size(max = 100, message = "{noMoreThan}")
+    @ExcelProperty("描述")
     private String description;
     /**
      * 部门ID

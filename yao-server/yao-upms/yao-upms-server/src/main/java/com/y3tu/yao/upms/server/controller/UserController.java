@@ -1,5 +1,7 @@
 package com.y3tu.yao.upms.server.controller;
 
+import com.alibaba.excel.support.ExcelTypeEnum;
+import com.y3tu.tool.web.excel.ExcelUtil;
 import com.y3tu.yao.common.constant.ServerConstant;
 import com.y3tu.yao.common.util.YaoUtil;
 import com.y3tu.yao.log.client.annotation.ControllerLog;
@@ -7,7 +9,6 @@ import com.y3tu.yao.log.client.constant.ActionTypeEnum;
 import com.y3tu.tool.core.pojo.R;
 import com.y3tu.tool.core.util.StrUtil;
 import com.y3tu.tool.web.base.pojo.Page;
-import com.y3tu.yao.log.client.constant.SaveModeEnum;
 import com.y3tu.yao.upms.client.entity.*;
 import com.y3tu.yao.upms.client.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -75,7 +78,7 @@ public class UserController {
 
     @PostMapping("page")
     @PreAuthorize("hasAuthority('user:view')")
-    @ControllerLog(actionName = "查询用户分页数据", actionType = ActionTypeEnum.VIEW,saveMode = SaveModeEnum.ES)
+    @ControllerLog(actionName = "查询用户分页数据", actionType = ActionTypeEnum.VIEW)
     public R page(@RequestBody Page<User> page) {
         return R.success(userService.page(page));
     }
@@ -121,7 +124,7 @@ public class UserController {
     public R checkPassword(@NotBlank(message = "{required}") String password) {
         String currentUsername = YaoUtil.getCurrentUsername();
         User user = userService.findUserByUsername(currentUsername);
-        boolean check= user != null && passwordEncoder.matches(password, user.getPassword());
+        boolean check = user != null && passwordEncoder.matches(password, user.getPassword());
         return R.success(check);
     }
 
@@ -156,6 +159,18 @@ public class UserController {
                       @RequestParam String verify,
                       @RequestParam String captchaId) {
         return null;
+    }
+
+    /**
+     * 导出全量用户数据
+     *
+     * @param response
+     * @throws IOException
+     */
+    @PostMapping(value = "/export")
+    public void export(HttpServletResponse response) throws Exception {
+        List<User> list = userService.list();
+        ExcelUtil.downExcel("用户", "用户", list, User.class, ExcelTypeEnum.XLSX, response);
     }
 
 }
