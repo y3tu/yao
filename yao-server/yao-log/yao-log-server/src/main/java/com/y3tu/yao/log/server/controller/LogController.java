@@ -52,6 +52,7 @@ public class LogController extends BaseController<LogService, Log> {
             page.setCurrent(currentPage);
             page.setSize(pageSize);
             return service.page(page).getRecords();
+
         });
 
     }
