@@ -75,7 +75,7 @@ public class Resource extends BaseEntity {
      */
     private String permission;
     /**
-     * 资源类型 0菜单 1按钮
+     * 资源类型 0菜单 1按钮 2目录
      */
     private Integer type;
     /**
@@ -103,10 +103,10 @@ public class Resource extends BaseEntity {
     private Date modifyTime;
 
     /**
-     * 是否外链
+     * iframe地址
      */
     @TableField("iframe")
-    private boolean iframe;
+    private String iframe;
 
     /**
      * 是否隐藏
@@ -119,5 +119,6 @@ public class Resource extends BaseEntity {
      */
     @TableField("cache")
     private boolean cache;
+
 
 }

@@ -10,6 +10,7 @@ import com.y3tu.tool.web.base.pojo.Page;
 import com.y3tu.yao.log.client.annotation.ControllerLog;
 import com.y3tu.yao.log.client.entity.Log;
 import com.y3tu.yao.log.client.service.LogService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +29,14 @@ public class LogController extends BaseController<LogService, Log> {
 
     private static final String MODULE_NAME = "系统日志模块";
 
+    @Autowired
+    private LogService logService;
+
     @ControllerLog(actionName = "查看用户操作日志信息", serverName = ServerConstant.LOG_SERVER, moduleName = MODULE_NAME)
     @PostMapping("/page")
     @Override
     public R page(@RequestBody Page page) {
-        return R.success(service.page(page));
+        return R.success(logService.page(page));
     }
 
     /**
@@ -45,14 +49,14 @@ public class LogController extends BaseController<LogService, Log> {
     @ControllerLog(actionName = "导出用户操作日志信息", serverName = ServerConstant.LOG_SERVER, moduleName = MODULE_NAME)
     @PostMapping("/export")
     public void export(@RequestBody Page page, HttpServletResponse response) throws Exception {
-        Page pageResult = service.page(page);
-        response = ExcelUtil.decorateResponse("操作日志",ExcelTypeEnum.XLSX,response);
+        Page pageResult = logService.page(page);
+        response = ExcelUtil.decorateResponse("操作日志", ExcelTypeEnum.XLSX, response);
         ExcelWriter excelWriter = ExcelUtil.write(response.getOutputStream()).excelType(ExcelTypeEnum.XLSX).build();
         ExcelUtil.pageWrite(excelWriter, "日志", 1, pageResult.getTotal(), (currentPage, pageSize) -> {
             page.setCurrent(currentPage);
             page.setSize(pageSize);
-            return service.page(page).getRecords();
-
+            Page pageInfo = logService.page(page);
+            return pageInfo.getRecords();
         });
 
     }

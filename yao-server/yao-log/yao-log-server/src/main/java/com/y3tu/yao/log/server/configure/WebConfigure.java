@@ -16,7 +16,7 @@ import java.util.List;
  * @author y3tu
  */
 @Configuration
-@MapperScan("com.y3tu.yao.log.server.mapper")
+@MapperScan("com.y3tu.yao.log.client.mapper")
 public class WebConfigure {
 
     /**
@@ -28,6 +28,8 @@ public class WebConfigure {
         List<ISqlParser> sqlParserList = new ArrayList<>();
         sqlParserList.add(new BlockAttackSqlParser());
         paginationInterceptor.setSqlParserList(sqlParserList);
+        //不限制单页数据量
+        paginationInterceptor.setLimit(-1);
         return paginationInterceptor;
     }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.y3tu.yao.log.client.mapper.LogMapper">
+
+    <select id="page" resultType="com.y3tu.yao.log.client.entity.Log">
+        select * from t_log
+        <where>
+            <if test="entity.username != '' and entity.username != null">
+                and username like concat('%',#{entity.username},'%')
+            </if>
+            <if test="entity.status != '' and entity.status != null">
+                and status = #{entity.status}
+            </if>
+            <if test="params.createTimeFrom != null and params.createTimeFrom !=''">
+                And create_time &gt; #{params.createTimeFrom}
+            </if>
+            <if test="params.createTimeTo!= null and params.createTimeTo !=''">
+                And create_time &lt; #{params.createTimeTo}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+</mapper>

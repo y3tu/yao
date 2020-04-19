@@ -2,7 +2,7 @@ package com.y3tu.yao.log.server.impl;
 
 import com.y3tu.yao.log.client.entity.Log;
 import com.y3tu.yao.log.client.service.LogService;
-import com.y3tu.yao.log.server.mapper.LogMapper;
+import com.y3tu.yao.log.client.mapper.LogMapper;
 import com.y3tu.tool.web.base.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 

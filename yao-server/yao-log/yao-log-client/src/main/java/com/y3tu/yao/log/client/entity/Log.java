@@ -31,7 +31,6 @@ public class Log extends BaseEntity {
      */
     @TableField("module_name")
     private String moduleName;
-
     /**
      * 操作名
      */
@@ -47,50 +46,40 @@ public class Log extends BaseEntity {
      */
     @TableField("server_name")
     private String serverName;
-
     /**
      * 操作IP地址
      */
     private String ip;
-
     /**
      * 地址
      */
     private String location;
-
     /**
      * 用户客户端信息
      */
     @TableField("user_agent")
     private String userAgent;
-
     /**
      * 请求URL
      */
     @TableField("request_url")
     private String requestUrl;
-
     /**
      * 操作方式
      */
     private String method;
-
     /**
      * 操作提交的数据
      */
     private String params;
-
     /**
      * 执行时间
      */
     private String time;
-
     /**
      * 异常信息
      */
     private String exception;
-
-
     /**
      * 调用者
      */

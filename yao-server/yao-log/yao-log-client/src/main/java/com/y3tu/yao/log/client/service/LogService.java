@@ -10,5 +10,4 @@ import com.y3tu.yao.log.client.entity.Log;
  */
 public interface LogService extends BaseService<Log> {
 
-
 }
